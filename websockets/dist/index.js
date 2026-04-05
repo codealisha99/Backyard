@@ -1,11 +1,15 @@
 import { WebSocketServer } from 'ws';
 const wss = new WebSocketServer({ port: 8080 });
-wss.on("connection", function (wss) {
+wss.on("connection", function (ws) {
     console.log("A client has connected!"); //1st
-    wss.send("hello"); //2nd
+    ws.send("hello"); //2nd
     setInterval(() => {
-        wss.send("Hello");
+        ws.send("Hello");
     }, 500); //3rd  
+    ws.on("message", (msg) => {
+        console.log("Received message from client: ", msg.toString());
+    });
     //we write the behavior of the socket server on whtever like on connection or on message     
+    //wss is the websocket server and ws is the client server
 });
 //# sourceMappingURL=index.js.map

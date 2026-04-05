@@ -7,6 +7,7 @@ import './App.css'
 
 function App() {
     const [wss, setWs] = useState();
+    const [client, setClient] = useState();
 
   function sendMessage(){
     if (wss) {
@@ -20,6 +21,11 @@ function App() {
     setWs(wss);
      wss.onmessage = (e) => {
       console.log(e.data);
+     }
+     const client = new WebSocket("ws://localhost:8081");
+     setClient(wss1);
+     ws1.onmessage = (event) => {
+      console.log(event.data);
      }
 
   }, []);
