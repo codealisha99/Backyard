@@ -1,7 +1,16 @@
+import { useEffect, useState } from 'react'
 import './App.css'
+import tailwindcss from '@tailwindcss/vite'
 
 
 function chat(){
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onmessage = (e) => {
+      setMessage(m => [...m, e.data]);
+    }
+  }, [])
   return (
     <div>
      hi there
