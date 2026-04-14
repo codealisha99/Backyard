@@ -1,0 +1,4 @@
+node_modules/
+mong/node_modules/
+.env
+mong/.env
