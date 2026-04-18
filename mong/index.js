@@ -1,24 +1,42 @@
+const bcrypt = require("bcrypt");
 const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
 const JWT_secret = "sfasgvfsdgdvs";
 const { UserModel, TodoModel } = require("./db");
+const { z } = require("zod");
 
 
-await mongoose.connect("mongosh mongodb+srv://cluster0.gyqojnb.mongodb.net/--apiVersion 1 --username alisha_31");
+await mongoose.connect("");
 app.use(express.json());
 
 
 app.post('/signup', async(req, res) => {
+
+    const requiredBody = z.object({
+        email: z.string().min(3).max(255).email(),
+        password: z.string(),
+        name: z.string()
+    })
+
+    const validation = requiredBody.safeParse(req.body);
+
+    if(!validation.success) {
+        return res.status(400).json({
+            message: "validation error",
+            errors: validation.error.errors
+        })
+    }
     const username = req.body.username;
     const password = req.body.pasword;
     const email = req.body.email;
 
+    const hashedpassword = await bcrypt.hash(password, 10);
 
      await UserModel.insert({
         username: username,
-        password: password,
-        email: gmail
+        password: hashedpassword,
+        email: email
       })
 
       res.json({
@@ -29,25 +47,18 @@ app.post('/signin', async(req, res) => {
       const email = req.body.email;
         const password = req.body.password;
 
-         const user = await UserModel.findOne({
+        const passwordMatch = bcrypt.compare(password, user.password);
+
+         const response = await UserModel.findOne({
             Email: Email,
-            password: password
+            
         });
-
-
-        if(user) {
-            const token = jwt.sign({
-                id: user._id
-                
-            } , JWT_secret);
-            res.json({
-                message: "user logged in successfully",
-                token: token
+         if(!response) {
+            return res.status(404).json({
+                message: "user not found"
             })
-        } else  (
-            res.status(402).json({ message: "invalif credentials"})
-           
-        )
+
+        
 });
 app.post('/todo',auth, (req, res) => {
        const userId = req.userId;
@@ -71,6 +82,5 @@ function auth(req,res,next) {
         })
     }
 }
-
+iycMvRZOkdd55ahh
 app.listen(3000);
-gwXLqx5G62Ja5v8u
